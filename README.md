@@ -18,9 +18,9 @@ Thus, this workaround.
 
 ## Apparent problem
 
-There is an execution path in Xcode API (which is hit a lot of time apparently), where
-the information about installed simulators and devices is retreived and filtered. The very first time,
-when Xcode Server is started, this information is retrieved from CouchDB, and then cached in Redis -
+There is an execution path in Xcode API (which is hit a lot of times, apparently), where
+the information about installed simulators and devices is retrieved and filtered. The very first time,
+when Xcode Server is started, the query is sent to CouchDB, and then the response is cached in Redis -
 to speed up subsequent requests for it. Problem is, this read-from-cache operation is extremely slow.
 
 I can't really say why... but it's pretty simple to check and time it.
@@ -37,7 +37,7 @@ This logic is in:
 
 So how to fix the slow cache access?
 If we eliminate cache, we get a good speed improvement, but it is still not fast enough.
-What we could do is a different kind of cache: file system
+What we can do is a different kind of cache: file system
 
 See the diff file for exact changes, but basically the idea is very simple:
 Instead of caching the devices JSON info in Redis, we store it in a file on disk. Reading that file
@@ -50,7 +50,7 @@ The file written is:
 
     /Library/Developer/XcodeServer/Logs/xcs_devices.json
 
-(I suspect that Redis is not really to blame here, but rather the way it used. However i haven't investigated
+(I suspect that Redis is not really to blame here, but rather the way it is used. However i haven't investigated
 further to be able to really pinpoint the root cause. This is a work-around after all ;-) )
 
 
