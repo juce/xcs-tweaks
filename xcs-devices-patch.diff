@@ -1,0 +1,39 @@
+--- deviceClass.js	2017-05-03 16:59:53.000000000 -0700
++++ deviceClass.js.NEW	2017-05-03 17:00:22.000000000 -0700
+@@ -12,6 +12,7 @@
+     dbCoreClass = require('./dbCoreClass.js'),
+     xcsutil = require('../util/xcsutil.js'),
+     logger = require('../util/logger.js'),
++    fs = require('fs'),
+     redisClass = require('./redisClass.js');
+ 
+ /* XCSDeviceClass object */
+@@ -141,11 +142,9 @@
+         query.endkey = [unitTestUUID, {}];
+     }
+ 
+-    log.info('redisClass: calling getDynamicQuery');
+-    redisClass.getDynamicQuery(req, doc_type, function DEVListRedisGetDynamicQuery(err, docs) {
+-        if (err) {
+-            opFailed(err);
+-        } else if (docs) {
++    var devicesFile = '/Library/Developer/XcodeServer/Logs/xcs_devices.json';
++    fs.readFile(devicesFile, 'utf8', function (err,docs) {
++        if (docs) {
+             log.info('parsing docs (JSON) ...');
+             docs = JSON.parse(docs);
+             log.info('Found', docs.length, 'devices in Redis.');
+@@ -169,8 +168,11 @@
+                 } else {
+                     log.info('Found', docs.length, 'devices in CouchDB.');
+ 
+-                    redisClass.setDynamicQuery(req, doc_type, JSON.stringify(docs), function DEVListRedisSetDynamicQuery(err, wasSaved) {
+-                        if (wasSaved) {
++                    fs.writeFile(devicesFile, JSON.stringify(docs), 'utf8', function(err) {
++                        if (err) {
++                            log.debug('Problem saving devices into ' + devicesFile);
++                        }
++                        else {
+                             log.debug('Successfully cached devices to Redis.');
+                         }
+                         // Even if there's an error (i.e. Redis suddenly went down), we can still continue since
