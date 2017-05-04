@@ -8,9 +8,10 @@ beam.smp and node processes get stuck using a lot of CPU, which makes Xcode Serv
 has a cascading effect of failing test, failing integrations, missing devices and simulators.
 
 The issue has been reported to Apple multiple times, but so far there is no official fix.
-https://forums.developer.apple.com/message/225059
-https://forums.developer.apple.com/message/222707
-https://forums.developer.apple.com/message/221457
+
+- https://forums.developer.apple.com/message/225059
+- https://forums.developer.apple.com/message/222707
+- https://forums.developer.apple.com/message/221457
 
 Thus, this workaround.
 
@@ -45,6 +46,10 @@ and the difference between two types of access is huge:
 - read from Redis: over 1 minute
 - read from file on disk: 0.5 sec
 
+The file written is:
+
+    /Library/Developer/XcodeServer/Logs/xcs_devices.json
+
 (I suspect that Redis is not really to blame here, but rather the way it used. However i haven't investigated
 further to be able to really pinpoint the root cause. This is a work-around after all ;-) )
 
@@ -67,7 +72,7 @@ Run this command a few times:
 
     sudo xcrun xcscontrol --list-simulators
 
-It will fail the first couple of times (will say 0 simulators found), because it makes a call to Xcode API and times out. But after about 30 seconds or so, the xcs-devices.json file will be created in /Library/Developer/XcodeServer/Logs/ directory, and once it appears, the next attempt to list the simulators should succeed now and be pretty fast too.
+It will fail the first couple of times (will say 0 simulators found), because it makes a call to Xcode API and times out. But after about 30 seconds or so, the xcs\_devices.json file will be created in /Library/Developer/XcodeServer/Logs/ directory, and once it appears, the next attempt to list the simulators should succeed now and be pretty fast too.
 
 
 ## Updating your simluators
