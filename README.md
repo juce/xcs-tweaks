@@ -77,6 +77,6 @@ It will fail the first couple of times (will say 0 simulators found), because it
 
 ## Updating your simluators
 
-If later on, you install another simulator, you would want to refresh the xcs-devices.json file.
+If later on, you install another simulator, you would want to refresh the xcs\_devices.json file.
 To do that simply remove it, and then try to list the simulators again a few times, as described in the previous section.
 
