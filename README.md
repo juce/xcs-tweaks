@@ -56,14 +56,14 @@ further to be able to really pinpoint the root cause. This is a work-around afte
 
 ## How to apply the patch:
 
-You need to be root, or prefix the commands below with "sudo":
+Execute the following commands to apply the patch:
 
     cd /Library/Developer/XcodeServer/CurrentXcodeSymlink/Contents/Developer/usr/share/xcs/xcsd/classes
-    patch deviceClass.js /path/to/xcs-tweaks/xcs-devices-patch.diff
+    sudo patch deviceClass.js /path/to/xcs-tweaks/xcs-devices-patch.diff
 
 Then, either restart Xcode Server via the Server app, or you can just kill the node processes and they will automatically re-spawn themselves:
 
-    pkill -f node
+    sudo pkill -f node
 
 
 ## Check if things are good now:
